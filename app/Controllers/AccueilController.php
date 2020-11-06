@@ -7,12 +7,15 @@ use App\Models\Annee;
 class AccueilController extends Controller {
 
     public function index() {
+        $currentDate = $_GET['currentDate'] ?? Annee::first();
+
         return $this->view('accueil', [
             'title' => 'Accueil',
             'style' => [
                 'timeline',
             ],
-            'dates' => Annee::all(),
+            'currentDate' => $currentDate,
+            'dates' => Annee::all(10),
         ]);
     }
 

@@ -69,16 +69,15 @@
 		</div>
 	</div>
 
-	<div class="h-20 bg-white flex justify-around">
+	<div class="bg-white flex justify-around">
 		<ul class="timeline" id="timeline">
 			<?php foreach ($dates as $date) : ?>
-				<li class="li complete">
+				<li class="li <?= $date->annee <= $currentDate ? 'complete' : '' ?>">
 					<div class="timestamp">
 						<span class="date"><?= $date->annee ?></span>
 					</div>
-					<div class="status">
-						<h4></h4>
-					</div>
+					
+					<a href="<?= SCRIPT_NAME ?>/immersailles.php?currentDate=<?= $date->annee ?>" class="status"></a>
 				</li>
 			<?php endforeach ?>
 		</ul>

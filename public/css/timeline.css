@@ -51,11 +51,6 @@
     transition: all 200ms ease-in;
 }
 
-/* .li.complete .status:hover::before {
-background-color: white;
-border: 1px solid #ddd;
-} */
-
 @media (min-device-width: 320px) and (max-device-width: 700px) {
     .timeline {
         list-style-type: none;
