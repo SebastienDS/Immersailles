@@ -23,8 +23,8 @@ class ConnexionController extends Controller {
     }
 
     public function validation() {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $username = htmlentities($_POST['username']);
+        $password = htmlentities($_POST['password']);
         $_SESSION['username'] = $username;
 
         if (Administrateur::isConnected($username, $password)) {

@@ -7,7 +7,8 @@ use App\Models\Annee;
 class AccueilController extends Controller {
 
     public function index() {
-        $currentDate = $_GET['currentDate'] ?? Annee::first();
+        $currentDate = (int)htmlentities($_GET['currentDate'] ?? Annee::first());
+        $currentEtage = (int)htmlentities($_GET['etage'] ?? 0);
 
         return $this->view('accueil', [
             'title' => 'Accueil',
@@ -16,6 +17,7 @@ class AccueilController extends Controller {
             ],
             'currentDate' => $currentDate,
             'dates' => Annee::all(10),
+            'currentEtage' => $currentEtage
         ]);
     }
 

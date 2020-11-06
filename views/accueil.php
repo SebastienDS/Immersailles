@@ -17,6 +17,7 @@
 				Aile Ouest du château -RDC
 			</h1>
 		</div>
+
 	</div>
 
 	<div class="flex flex-col md:flex-row" style='height: 68.4%;'>
@@ -102,10 +103,37 @@
 	const marker = L.marker([bounds[1][0] / 2, bounds[1][1] / 2]).addTo(map);
 	marker.bindPopup('I am a popup.').openPopup();
 
-	const popup = L.popup();
-	map.on('click', e => {
-		popup.setLatLng(e.latlng)
-			.setContent('You clicked the map at ' + e.latlng)
-			.openOn(map);
-	})
+	// const popup = L.popup();
+	// map.on('click', e => {
+	// 	popup.setLatLng(e.latlng)
+	// 		.setContent('You clicked the map at ' + e.latlng)
+	// 		.openOn(map);
+	// })
+</script>
+
+<script>
+	const createEtage = function (numEtage, disabled=false) {
+		const etage = document.createElement('a');
+		etage.classList.add("leaflet-control-zoom-in");
+		etage.innerText = numEtage;
+
+		if (disabled) { 
+			etage.classList.add("leaflet-disabled");
+			return etage;
+		}
+		etage.href += '?etage=' + numEtage + "&currentDate=<?= $currentDate ?>";
+
+		return etage;
+	}
+
+	const etagePosition = document.querySelector('.leaflet-top.leaflet-right');
+
+	const container = document.createElement('div');
+	container.classList.add('leaflet-control-zoom', 'leaflet-bar', 'leaflet-control');
+
+	<?php for ($i=0; $i < 4; $i++): ?>
+		container.appendChild(createEtage(<?= $i ?>, <?= json_encode($currentEtage == $i ? true : false) ?>));
+	<?php endfor ?>
+
+	etagePosition.appendChild(container);
 </script>
