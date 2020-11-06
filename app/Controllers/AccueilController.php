@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\Annee;
+
 class AccueilController extends Controller {
 
     public function index() {
@@ -9,7 +11,8 @@ class AccueilController extends Controller {
             'title' => 'Accueil',
             'style' => [
                 'timeline',
-            ]
+            ],
+            'dates' => Annee::all(),
         ]);
     }
 

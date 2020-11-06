@@ -20,19 +20,8 @@
   </div>
 
   <div class="flex flex-col md:flex-row" style='height: 68.4%;'>
-      <div class="bg-gray-500 md:w-3/4 h-full" id="map">
-          <script>
-            var map = L.map('map', {
-              crs: L.CRS.Simple
-            });
+      <div class="bg-gray-500 md:w-3/4 h-full" id="map"></div>
 
-            var bounds = [[0,0], [1000,1000]];
-            var image = L.imageOverlay('public/img/plan1.png', bounds).addTo(map);
-
-            map.fitBounds(bounds);
-
-          </script>
-      </div>
       <div class="bg-black md:w-1/4">
           
           <div class="bg-white h-32 relative border">
@@ -78,93 +67,31 @@
   </div>
 
   <div class="h-20 bg-white flex justify-around">
-
       <ul class="timeline" id="timeline">
-        <li class="li complete">
-          <div class="timestamp">
-            <span class="date">1730</span>
-          </div>
-          <div class="status">
-            <h4></h4>
-          </div>
-        </li>
-        <li class="li complete">
-          <div class="timestamp">
-            <span class="date">1740</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li complete">
-          <div class="timestamp">
-            <span class="date">1750</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
-        <li class="li">
-          <div class="timestamp">
-            <span class="date">1760</span>
-          </div>
-          <div class="status">
-          </div>
-        </li>
+        <?php foreach ($dates as $date): ?>
+          <li class="li complete">
+            <div class="timestamp">
+              <span class="date"><?= $date->annee ?></span>
+            </div>
+            <div class="status">
+              <h4></h4>
+            </div>
+          </li>
+        <?php endforeach ?>
        </ul>      
   </div>
 </div>
+
+<?php [$width, $height] = getimagesize('public/img/plan1.png') ?>
+
+<script>
+  const map = L.map('map', {
+    crs: L.CRS.Simple
+  });
+
+  const bounds = [[0, 0], [<?= $height / 6 ?>, <?= $width / 6 ?>]];
+  const image = L.imageOverlay('public/img/plan1.png', bounds).addTo(map);
+
+  map.fitBounds(bounds);
+
+</script>
