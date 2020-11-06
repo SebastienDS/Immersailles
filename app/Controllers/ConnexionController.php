@@ -43,6 +43,12 @@ class ConnexionController extends Controller {
         ]);
     }
 
+    public function forgotPassword() {
+        return $this->view('forgotPassword', [
+            'title' => 'Mot de pass oublié',
+        ]);
+    }
+
     public function logout() {
         session_destroy();
         return header('Location: '. SCRIPT_NAME .'/immersailles.php');
