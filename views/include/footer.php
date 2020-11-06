@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <a href="<?= SCRIPT_NAME ?>/immersaille.php/en-savoir-plus"><h3 class="text-orange-400">En Savoir Plus</h3></a>
+                <a href="<?= SCRIPT_NAME ?>/immersailles.php/en-savoir-plus"><h3 class="text-orange-400">En Savoir Plus</h3></a>
                 <div class="text-white">
                     lorem 
                 </div>
