@@ -85,18 +85,19 @@
 	</div>
 </div>
 
-<?php [$width, $height] = getimagesize('public/img/plan1.png') ?>
-
 <script>
 	const map = L.map('map', {
 		crs: L.CRS.Simple
 	});
 
+	const img = document.createElement('img');
+	img.src = 'public/img/plan1.png';
+
 	const bounds = [
 		[0, 0],
-		[<?= $height / 6 ?>, <?= $width / 6 ?>]
+		[img.height / 6, img.width / 6]
 	];
-	const image = L.imageOverlay('public/img/plan1.png', bounds).addTo(map);
+	const image = L.imageOverlay(img, bounds).addTo(map);
 
 	map.fitBounds(bounds);
 
