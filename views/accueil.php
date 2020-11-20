@@ -86,11 +86,6 @@
 </div>
 
 <script>
-	const map = L.map('map', {
-		crs: L.CRS.Simple,
-		minzoom: 0
-	});
-
 	const img = document.createElement('img');
 	img.src = 'public/img/plan1.png';
 
@@ -98,11 +93,20 @@
 		[0, 0],
 		[img.height / 6, img.width / 6]
 	];
+
+	const center = [bounds[1][0] / 2, bounds[1][1] / 2];
+	
+	const map = L.map('map', {
+		crs: L.CRS.Simple,
+		center: center,
+		minzoom: 0
+	});
+	
 	const image = L.imageOverlay(img, bounds).addTo(map);
 
 	map.fitBounds(bounds);
 
-	const marker = L.marker([bounds[1][0] / 2, bounds[1][1] / 2]).addTo(map);
+	const marker = L.marker(center).addTo(map);
 	marker.bindPopup('I am a popup.').openPopup();
 
 	// const popup = L.popup();
