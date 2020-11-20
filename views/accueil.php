@@ -87,7 +87,8 @@
 
 <script>
 	const map = L.map('map', {
-		crs: L.CRS.Simple
+		crs: L.CRS.Simple,
+		minzoom: 0
 	});
 
 	const img = document.createElement('img');
