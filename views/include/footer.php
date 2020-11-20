@@ -1,4 +1,4 @@
-<div class="h-20 bg-black text-xs" style="height: 10%">
+<div class="bg-black text-xs" style="height: 10%">
     <div class="h-12 flex justify-around py-2">
         <div>
             <h3 class="text-orange-400">Crédits</h3>

@@ -25,7 +25,8 @@
 
 		<div class="bg-black md:w-1/4">
 
-			<div class="bg-white h-32 relative border">
+			<div class="bg-white h-32 relative border overflow-hidden">
+				<img src="<?= $image ?>" alt="" class="w-full block -my-20">
 				<span class="absolute top-0 right-0 p-2">
 					<svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
 						<title>Close</title>
@@ -33,7 +34,7 @@
 					</svg>
 				</span>
 
-				<h1 class="absolute uppercase font-extrabold bottom-0 right-0 pr-4">
+				<h1 class="absolute uppercase font-extrabold bottom-0 right-0 mr-4 py-0 bg-white rounded-lg">
 					Nom de l'objet
 				</h1>
 			</div>
@@ -132,12 +133,12 @@
 		return etage;
 	}
 
-	const etagePosition = document.querySelector('.leaflet-top.leaflet-right');
+	const etagePosition = document.querySelector('.leaflet-bottom.leaflet-left');
 
 	const container = document.createElement('div');
 	container.classList.add('leaflet-control-zoom', 'leaflet-bar', 'leaflet-control');
 
-	<?php for ($i=0; $i < 4; $i++): ?>
+	<?php for ($i=3; $i >= 0; $i--): ?>
 		container.appendChild(createEtage(<?= $i ?>, <?= json_encode($currentEtage == $i ? true : false) ?>));
 	<?php endfor ?>
 
