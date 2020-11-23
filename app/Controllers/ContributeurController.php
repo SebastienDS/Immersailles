@@ -4,7 +4,7 @@
 namespace App\Controllers;
 
 
-class Contributeur extends Controller {
+class ContributeurController extends Controller {
 
     public function accueil() {
         $this->isConnected(['contributeur']);
