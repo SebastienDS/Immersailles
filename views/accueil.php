@@ -102,10 +102,10 @@
 		center: center,
 		minzoom: 0
 	});
+	map.fitBounds(bounds);
 	
 	const image = L.imageOverlay(img, bounds).addTo(map);
 
-	map.fitBounds(bounds);
 
 	const marker = L.marker(center).addTo(map);
 	marker.bindPopup('I am a popup.').openPopup();
