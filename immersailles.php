@@ -31,4 +31,7 @@ $router->get('/logout', 'App\Controllers\ConnexionController@logout');
 $router->get('/404', 'App\Controllers\NotFoundController@notFound');
 
 
+$router->get('/infos/:id', 'App\Controllers\APIController@getInfos');
+
+
 $router->run();
