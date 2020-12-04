@@ -1,8 +1,6 @@
-Mettre meme ligne Trier par ...
 reduire blanc sous cercle (plus tard)
 mot de passe oublié (plus tard)
 ajouter marqueur
 ajouter map
 open data
-remplacer les informations a droite au debut par un tuto
 historique des connexions
