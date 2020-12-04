@@ -1,9 +1,6 @@
-Enlever Aile Ouest ...
 Mettre meme ligne Trier par ...
-Corriger bug map
-reduire taille cercle 
-reduire blanc sous cercle
-mot de passe oublié
+reduire blanc sous cercle (plus tard)
+mot de passe oublié (plus tard)
 ajouter marqueur
 ajouter map
 open data
