@@ -13,4 +13,8 @@ class ContributeurController extends Controller {
             'title' => 'Accueil',
         ]);
     }
+
+    public function addMap() {
+        $this->isConnected(['contributeur', 'admin']);
+    }
 }

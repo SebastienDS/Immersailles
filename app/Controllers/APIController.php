@@ -44,14 +44,15 @@ class ApiController extends Controller {
 
     private function getBirth($infos) {
         $date = substr($infos->claims->P569[0]->mainsnak->datavalue->value->time, 1, 10);
-        $format = (new DateTime($date))->format('j m Y');
-        $array = explode(' ', $format);
-        $array[1] = self::$month[(int)$array[1] - 1];
-        return implode(' ', $array);
+        return self::toDate($date);
     }
     
     private function getDeath($infos) {
         $date = substr($infos->claims->P570[0]->mainsnak->datavalue->value->time, 1, 10);
+        return self::toDate($date);
+    }
+
+    private static function toDate($date) {
         $format = (new DateTime($date))->format('j m Y');
         $array = explode(' ', $format);
         $array[1] = self::$month[(int)$array[1] - 1];

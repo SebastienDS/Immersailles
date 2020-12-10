@@ -16,10 +16,8 @@ $url = substr($fullUrl, strlen($prefix));
 $router = new Router($url);
 
 $router->get('/', 'App\Controllers\AccueilController@index');
+$router->get('/404', 'App\Controllers\NotFoundController@notFound');
 $router->get('/en-savoir-plus', 'App\Controllers\AccueilController@enSavoirPlus');
-
-$router->get('/admin', 'App\Controllers\AdminController@accueil');
-$router->get('/contributeur', 'App\Controllers\ContributeurController@accueil');
 
 
 $router->get('/connexion', 'App\Controllers\ConnexionController@connexion');
@@ -28,7 +26,15 @@ $router->get('/changePassword', 'App\Controllers\ConnexionController@changePassw
 $router->get('/forgotPassword', 'App\Controllers\ConnexionController@forgotPassword');
 $router->get('/logout', 'App\Controllers\ConnexionController@logout');
 
-$router->get('/404', 'App\Controllers\NotFoundController@notFound');
+
+$router->get('/admin', 'App\Controllers\AdminController@accueil');
+$router->get('/admin/contributors', 'App\Controllers\AdminController@contributor');
+$router->get('/admin/addContributor', 'App\Controllers\AdminController@addContributorPage');
+$router->post('/admin/addContributor', 'App\Controllers\AdminController@addContributor');
+$router->post('/admin/deleteContributor/:idProfil', 'App\Controllers\AdminController@deleteContributor');
+
+
+$router->get('/contributeur', 'App\Controllers\ContributeurController@accueil');
 
 
 $router->get('/infos/:id', 'App\Controllers\APIController@getInfos');

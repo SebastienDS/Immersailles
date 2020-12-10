@@ -9,6 +9,7 @@ use App\Models\Contributeur;
 class ConnexionController extends Controller {
 
     public function connexion() {
+        $this->redirectIfLogged();
         $error = (int)htmlentities($_GET['error'] ?? 0);
 
         $msg_error = '';
@@ -52,5 +53,11 @@ class ConnexionController extends Controller {
     public function logout() {
         session_destroy();
         return header('Location: '. SCRIPT_NAME .'/immersailles.php');
+    }
+
+    public function redirectIfLogged() {
+        if (isset($_SESSION['auth'])) {
+            return header('Location: '. SCRIPT_NAME .'/immersailles.php/'. $_SESSION['auth']);
+        }
     }
 }
