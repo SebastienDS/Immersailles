@@ -26,9 +26,19 @@
 
         <div class="flex justify-around items-center w-3/6 md:w-2/6 lg:w-1/6">
             <h2 class="text-white">A propos</h2>
-            <div class="bg-white border-black rounded-full w-12 h-12"></div>
-            <a href="<?= SCRIPT_NAME ?>/immersailles.php/connexion">
-                <div class="bg-white border-black rounded-full w-12 h-12"></div>
-            </a>
+            
+            <?php if (isset($_SESSION['auth'])): ?>
+                <a href="<?= SCRIPT_NAME ?>/immersailles.php/<?= $_SESSION['auth'] ?>">
+                    <i class="fa fa-home text-white" style="font-size: 3rem"></i>
+                </a>
+                <a href="<?= SCRIPT_NAME ?>/immersailles.php/logout">
+                    <i class="fa fa-sign-out text-white" style="font-size: 3rem"></i>
+                </a>
+            <?php else: ?>
+                <a href="<?= SCRIPT_NAME ?>/immersailles.php/connexion">
+                    <img src="<?= SCRIPT_NAME ?>/public/img/logo_log_in.png" alt="log in" class="w-12 h-12">
+                </a>
+            <?php endif ?>
+            
         </div>
     </div>
