@@ -1,10 +1,21 @@
 <div style="height: 80%">
-	<div class="flex justify-around mx-12 my-2 w-2/3">
-		<div>Trier par <span class="text-blue-800"> Objects (330) </span></div>
-		<div >Tout (330)</div>
-		<div>OEuvres d'art (120)</div>
-		<div>Mobilier (100)</div>
-		<div>Décoration (110)</div>
+	<div class="flex justify-between">
+		<div class="flex justify-around mx-12 my-2 w-2/3">
+			<div>Trier par <span class="text-blue-800"> Objects (330) </span></div>
+			<div >Tout (330)</div>
+			<div>OEuvres d'art (120)</div>
+			<div>Mobilier (100)</div>
+			<div>Décoration (110)</div>
+		</div>
+
+		<?php if (isset($_SESSION['auth'])): ?>
+			<div class="flex items-center justify-around w-2/12 px-6 cursor-pointer" id="addMarker">
+				Ajouter un marker <i class="fa fa-plus px-2" style="font-size:45px"></i>
+			</div>
+			<div class="flex items-center justify-around w-1/5 px-6 cursor-pointer" id="deleteMarker">
+				Supprimer un marker <i class="fa fa-minus px-2" style="font-size:45px"></i>
+			</div>
+		<?php endif ?>
 	</div>
 
 	<div class="flex flex-col md:flex-row" style='height: 73%;'>
@@ -20,9 +31,30 @@
 				</div>
 			</div>
 
+			<form id='markerForm' class="hidden items-center">
+				<div class="relative">
+					<span class="absolute top-0 right-0 p-2" id="close">
+						<svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+							<title>Close</title>
+							<path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+						</svg>
+					</span>
+				</div>
+				<div class="flex items-center h-full">
+					<div class="text-white flex flex-col justify-around items-center w-full" style="height: 80%">
+						<input type="text" placeholder="ID wikidata" class="w-2/6 px-4 py-2 rounded" required>
+						<div class="flex justify-around">
+							<input type="number" id="x" placeholder="X" class="w-2/6 px-4 py-2 rounded text-black" required>
+							<input type="number" id="y" placeholder="Y" class="w-2/6 px-4 py-2 rounded text-black" required>
+						</div>
+						<button type="submit" class="w-2/6 px-4 py-2 rounded border">Envoyer</button>
+					</div>
+				</div>
+			</form>
+
 			<div id="infos" class="hidden">
 				<div class="bg-white h-48 relative border overflow-hidden">
-					<img src="#"class="w-full block -my-20" id="image">
+					<img src="#" class="w-full block -my-20" id="image">
 					<span class="absolute top-0 right-0 p-2" id="close">
 						<svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
 							<title>Close</title>
@@ -82,7 +114,11 @@
 </div>
 
 <script>
-	const close = document.querySelector('#close');
+	const close = document.querySelectorAll('#close');
+	const addMarker = document.querySelector('#addMarker');
+	const markerForm = document.querySelector('#markerForm');
+	const X = document.querySelector('#x');
+	const Y = document.querySelector('#y');
 	const image_ = document.querySelector('#image');
 	const tuto = document.querySelector('#tuto');
 	const infos = document.querySelector('#infos');
@@ -90,10 +126,30 @@
 	const description = document.querySelector('#description');
 	const birth = document.querySelector('#birth');
 	const death = document.querySelector('#death');
+	
 
 	const img = document.createElement('img');
-	img.src = 'public/img/plan1.png';
+	img.src = 'public/img/plans/<?= $map ?>.png';
 
+	const createEtage = function (numEtage, currentEtage=false, disabled=false) {
+		const etage = document.createElement('a');
+		etage.classList.add("leaflet-control-zoom-in");
+		etage.innerText = numEtage;
+
+		if (currentEtage) {
+			etage.style.backgroundColor = '#f6ad55';
+			etage.style.color = 'gray';
+		}
+
+		if (disabled || currentEtage) { 
+			etage.classList.add("leaflet-disabled");
+			return etage;
+		}
+		etage.href += '?etage=' + numEtage + "&currentDate=<?= $currentDate ?>";
+
+		return etage;
+	}
+			
 	img.addEventListener('load', () => {
 		const bounds = [
 			[0, 0],
@@ -111,12 +167,30 @@
 		
 		const image = L.imageOverlay(img, bounds).addTo(map);
 
+		const m = L.marker(center).addTo(map);
 
-		const marker = L.marker(center).addTo(map);
-		marker.bindPopup('I am a popup.').openPopup();
+		const marker = L.marker([-10000, -10000]).addTo(map);
+		marker.setOpacity(0);
 
+		const setCoord = function (e) {
+			const {lat, lng} = e.latlng;
+			X.value = lat;
+			Y.value = lng;
+			marker.setLatLng(e.latlng);
+			marker.setOpacity(1);
 
-		marker.addEventListener('click', () => {
+			X.addEventListener('change', (e) => {
+				const {lat, lng} = marker.getLatLng();
+				marker.setLatLng([e.target.value, lng]);
+			});
+
+			Y.addEventListener('change', (e) => {
+				const {lat, lng} = marker.getLatLng();
+				marker.setLatLng([lat, e.target.value]);
+			});
+		};
+
+		m.addEventListener('click', () => {
 			fetch('immersailles.php/infos/Q7742')
 			.then(data => data.json())
 			.then(json => {
@@ -126,39 +200,41 @@
 				birth.innerText = json.birth;
 				death.innerText = json.death;
 
-				infos.style.display = 'block';
 				tuto.style.display = 'none';
-				console.log(json);
-			});
-		})
+				markerForm.style.display = 'none';
+				infos.style.display = 'block';
 
-		close.addEventListener('click', () => {
-			infos.style.display = 'none';
-			tuto.style.display = 'flex';
+				map.removeEventListener('click', setCoord);
+				X.value = '';
+				Y.value = '';
+				marker.setOpacity(0);
+				marker.setLatLng([-10000, -10000]);
+			});
 		});
 
-		// const popup = L.popup();
-		// map.on('click', e => {
-		// 	popup.setLatLng(e.latlng)
-		// 		.setContent('You clicked the map at ' + e.latlng)
-		// 		.openOn(map);
-		// });
 
+		close.forEach(btn => {
+			btn.addEventListener('click', () => {
+				infos.style.display = 'none';
+				markerForm.style.display = 'none';
+				tuto.style.display = 'flex';
 
+				map.removeEventListener('click', setCoord);
+				X.value = '';
+				Y.value = '';
+				marker.setOpacity(0);
+				marker.setLatLng([-10000, -10000]);
+			});
+		});
 
+		if (addMarker) {
+			addMarker.addEventListener('click', () => {
+				tuto.style.display = 'none';
+				infos.style.display = 'none';
+				markerForm.style.display = 'block';
 
-		const createEtage = function (numEtage, disabled=false) {
-			const etage = document.createElement('a');
-			etage.classList.add("leaflet-control-zoom-in");
-			etage.innerText = numEtage;
-
-			if (disabled) { 
-				etage.classList.add("leaflet-disabled");
-				return etage;
-			}
-			etage.href += '?etage=' + numEtage + "&currentDate=<?= $currentDate ?>";
-
-			return etage;
+				map.addEventListener('click', setCoord); 
+			});
 		}
 
 		const etagePosition = document.querySelector('.leaflet-bottom.leaflet-left');
@@ -166,9 +242,9 @@
 		const container = document.createElement('div');
 		container.classList.add('leaflet-control-zoom', 'leaflet-bar', 'leaflet-control');
 
-		<?php for ($i=3; $i >= 0; $i--): ?>
-			container.appendChild(createEtage(<?= $i ?>, <?= json_encode($currentEtage == $i ? true : false) ?>));
-		<?php endfor ?>
+		<?php foreach (array_reverse($etages) as $etage): ?>
+			container.appendChild(createEtage(<?= $etage->etage ?>, <?= json_encode($currentEtage == $etage->etage ? true : false) ?>, <?= (!$etage->nombre) || ($currentEtage == $etage->etage) ?>));
+		<?php endforeach ?>
 
 		etagePosition.appendChild(container);
 	});

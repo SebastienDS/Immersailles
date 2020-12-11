@@ -30,10 +30,10 @@ class ConnexionController extends Controller {
 
         if (Administrateur::isConnected($username, $password)) {
             $_SESSION['auth'] = 'admin';
-            return header('Location: '. SCRIPT_NAME .'/immersailles.php/admin');
+            return header('Location: '. SCRIPT_NAME .'/immersailles.php');
         } else if (Contributeur::isConnected($username, $password)) {
             $_SESSION['auth'] = 'contributeur';
-            return header('Location: '. SCRIPT_NAME .'/immersailles.php/contributeur');
+            return header('Location: '. SCRIPT_NAME .'/immersailles.php');
         }
         return header('Location: '. SCRIPT_NAME .'/immersailles.php/connexion?error=1');
     }

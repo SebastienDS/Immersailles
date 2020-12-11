@@ -41,12 +41,13 @@ class Contributeur extends Model {
         Profil::deleteProfil($idProfil);
     }
 
-    public static function create(string $username, string $email, string $password) {
+    public static function create(string $username, string $email, string $password): int {
         $table = self::$table;
 
         $idProfil = Profil::create($username, $email, $password);
 
         $stmt = DBConnection::getPDO()->prepare("INSERT INTO $table (idProfil) VALUES (?)");
         $stmt->execute([$idProfil]);
+        return DBConnection::getPDO()->lastInsertId();
     }
 }

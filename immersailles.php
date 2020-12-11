@@ -35,6 +35,10 @@ $router->post('/admin/deleteContributor/:idProfil', 'App\Controllers\AdminContro
 
 
 $router->get('/contributeur', 'App\Controllers\ContributeurController@accueil');
+$router->get('/contributeur/mapManagement', 'App\Controllers\ContributeurController@mapManagement');
+$router->get('/contributeur/map/infos/:mapName', 'App\Controllers\ContributeurController@mapInfos');
+$router->post('/contributeur/map/infos/:mapName', 'App\Controllers\ContributeurController@addMap');
+
 
 
 $router->get('/infos/:id', 'App\Controllers\APIController@getInfos');
