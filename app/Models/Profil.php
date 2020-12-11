@@ -24,4 +24,16 @@ class Profil extends Model {
         $stmt->execute([$username, $email, sha1($password)]);
         return DBConnection::getPDO()->lastInsertId();
     }
+
+    public static function getIdWhere(array $whereConditions): int {
+        $tableName = static::$table;
+        $queryCondition = implode(' and ', array_map(function($condition) {
+            return "$condition = :$condition";
+        }, array_keys($whereConditions)));
+
+        $stmt = DBConnection::getPDO()->prepare("SELECT idProfil FROM {$tableName} WHERE {$queryCondition}");
+        $stmt->setFetchMode(PDO::FETCH_OBJ);
+        $stmt->execute($whereConditions);
+        return $stmt->fetch()->idProfil;
+    }
 }

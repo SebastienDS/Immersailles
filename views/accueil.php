@@ -31,7 +31,7 @@
 				</div>
 			</div>
 
-			<form id='markerForm' class="hidden items-center">
+			<form id='markerForm' class="hidden items-center" method="post">
 				<div class="relative">
 					<span class="absolute top-0 right-0 p-2" id="close">
 						<svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -42,11 +42,12 @@
 				</div>
 				<div class="flex items-center h-full">
 					<div class="text-white flex flex-col justify-around items-center w-full" style="height: 80%">
-						<input type="text" placeholder="ID wikidata" class="w-2/6 px-4 py-2 rounded" required>
+						<input type="text" maxlength="10" placeholder="ID wikidata" class="w-2/6 px-4 py-2 rounded text-black" name="IDWikiData" required>
 						<div class="flex justify-around">
-							<input type="number" id="x" placeholder="X" class="w-2/6 px-4 py-2 rounded text-black" required>
-							<input type="number" id="y" placeholder="Y" class="w-2/6 px-4 py-2 rounded text-black" required>
+							<input type="number" step="any" id="x" placeholder="X" class="w-2/6 px-4 py-2 rounded text-black" name="X" required>
+							<input type="number" step="any" id="y" placeholder="Y" class="w-2/6 px-4 py-2 rounded text-black" name="Y" required>
 						</div>
+						<input type="hidden" name="idNiveau" value="<?= $map->idNiveau ?>">
 						<button type="submit" class="w-2/6 px-4 py-2 rounded border">Envoyer</button>
 					</div>
 				</div>
@@ -129,7 +130,7 @@
 	
 
 	const img = document.createElement('img');
-	img.src = 'public/img/plans/<?= $map ?>.png';
+	img.src = 'public/img/plans/<?= $map->map ?>.png';
 
 	const createEtage = function (numEtage, currentEtage=false, disabled=false) {
 		const etage = document.createElement('a');

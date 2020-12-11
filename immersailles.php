@@ -16,6 +16,7 @@ $url = substr($fullUrl, strlen($prefix));
 $router = new Router($url);
 
 $router->get('/', 'App\Controllers\AccueilController@index');
+$router->post('/', 'App\Controllers\AccueilController@addMarker');
 $router->get('/404', 'App\Controllers\NotFoundController@notFound');
 $router->get('/en-savoir-plus', 'App\Controllers\AccueilController@enSavoirPlus');
 

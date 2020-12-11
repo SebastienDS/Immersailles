@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\Annee;
 use App\Models\Niveau;
 use App\Models\Etage;
+use App\Models\Marker;
+use App\Models\ObjetHistorique;
 
 class AccueilController extends Controller {
 
@@ -40,5 +42,21 @@ class AccueilController extends Controller {
         return $this->view('findOutMore', [
             'title' => 'En savoir plus',
         ]);
+    }
+
+    public function addMarker() {
+        $wikiData = $_POST['IDWikiData'];
+        $niveau = $_POST['idNiveau'];
+        $X = floatval($_POST['X']);
+        $Y = floatval($_POST['Y']);
+
+        if (!ObjetHistorique::exists($wikiData)) {
+            ObjetHistorique::create($wikiData);
+        }
+        if (!Marker::exists($wikiData, $niveau, $X, $Y)) {
+            Marker::create($wikiData, $niveau, $X, $Y, $_SESSION['id']);
+        }
+        
+        return header('Location: '. SCRIPT_NAME . '/immersailles.php');
     }
 }
