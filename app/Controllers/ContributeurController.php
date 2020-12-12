@@ -7,6 +7,8 @@ use App\Models\Annee;
 use App\Models\Contient_A_N;
 use App\Models\Etage;
 use App\Models\Niveau;
+use App\Models\Marker;
+
 
 class ContributeurController extends Controller {
 
@@ -66,5 +68,11 @@ class ContributeurController extends Controller {
         Contient_A_N::create($annee, $id);
         rename("depot/maps/$mapName", "public/img/plans/$map.png");
         return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/mapManagement');
+    }
+
+    public function deleteMarker(int $idNiveau, string $idObjet, float $X, float $Y) {
+        Marker::delete($idNiveau, $idObjet, $X, $Y);
+
+        return var_dump($idNiveau, $idObjet, $X, $Y);
     }
 }

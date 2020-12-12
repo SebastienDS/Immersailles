@@ -39,6 +39,7 @@ $router->get('/contributeur', 'App\Controllers\ContributeurController@accueil');
 $router->get('/contributeur/mapManagement', 'App\Controllers\ContributeurController@mapManagement');
 $router->get('/contributeur/map/infos/:mapName', 'App\Controllers\ContributeurController@mapInfos');
 $router->post('/contributeur/map/infos/:mapName', 'App\Controllers\ContributeurController@addMap');
+$router->post('/contributeur/deleteMarker/:idNiveau/:idWikiData/:X/:Y', 'App\Controllers\ContributeurController@deleteMarker');
 
 
 

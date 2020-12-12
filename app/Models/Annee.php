@@ -47,4 +47,13 @@ class Annee extends Model {
         $stmt->execute([$annee]);
         return DBConnection::getPDO()->lastInsertId();
     }
+
+    public static function range(int $start, int $range): array {
+        $table = self::$table;
+      
+        $stmt = DBConnection::getPDO()->prepare("SELECT * FROM $table ORDER BY annee LIMIT ?, ?");
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute([$start, $range]);
+        return $stmt->fetchAll();
+    }
 }

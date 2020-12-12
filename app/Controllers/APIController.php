@@ -4,6 +4,7 @@
 namespace App\Controllers;
 
 use DateTime;
+use Exception;
 
 class ApiController extends Controller {
 
@@ -11,18 +12,23 @@ class ApiController extends Controller {
 
     public function getInfos(string $id) {
         $infos = $this->getData($id);
-        $data = [
-            'name' => $this->getName($infos),
-            'image' => $this->getImage($infos, 370),
-            'description' => $this->getDescription($infos),
-            'birth' => $this->getBirth($infos),
-            'death' => $this->getDeath($infos)
-        ];
-        echo json_encode($data);
+        if ($infos) {
+            $infos = [
+                'name' => $this->getName($infos),
+                'image' => $this->getImage($infos, 370),
+                'description' => $this->getDescription($infos),
+                'birth' => $this->getBirth($infos),
+                'death' => $this->getDeath($infos)
+            ];
+        }
+        
+        echo json_encode($infos);
     }
     
     private function getData(string $idWiki) {
-        return json_decode(file_get_contents("https://www.wikidata.org/wiki/Special:EntityData/${idWiki}.json"))->entities->$idWiki;
+        $content = @file_get_contents("https://www.wikidata.org/wiki/Special:EntityData/${idWiki}.json");
+        if (!$content) return [];
+        return json_decode($content)->entities->$idWiki;
     }
 
     private function getImage($infos, int $size) {

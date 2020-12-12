@@ -31,6 +31,22 @@
 				</div>
 			</div>
 
+			<div class="text-white hidden text-2xl font-bold text-center" id='tutoDelete'>
+				<div class="relative">
+					<span class="absolute top-0 right-0 p-2" id="close">
+						<svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+							<title>Close</title>
+							<path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+						</svg>
+					</span>
+				</div>
+				<div class="flex items-center h-full">
+					<div>
+						Cliquez sur un <i class="fa fa-map-marker" style="font-size:45px"></i> pour le supprimer
+					</div>
+				</div>
+			</div>
+
 			<form id='markerForm' class="hidden items-center" method="post">
 				<div class="relative">
 					<span class="absolute top-0 right-0 p-2" id="close">
@@ -48,6 +64,9 @@
 							<input type="number" step="any" id="y" placeholder="Y" class="w-2/6 px-4 py-2 rounded text-black" name="Y" required>
 						</div>
 						<input type="hidden" name="idNiveau" value="<?= $map->idNiveau ?>">
+						<input type="hidden" name="etage" value="<?= $_GET['etage'] ?>">
+						<input type="hidden" name="currentDate" value="<?= $_GET['currentDate'] ?>">
+
 						<button type="submit" class="w-2/6 px-4 py-2 rounded border">Envoyer</button>
 					</div>
 				</div>
@@ -118,9 +137,11 @@
 	const close = document.querySelectorAll('#close');
 	const addMarker = document.querySelector('#addMarker');
 	const markerForm = document.querySelector('#markerForm');
+	const deleteMarker = document.querySelector('#deleteMarker');
 	const X = document.querySelector('#x');
 	const Y = document.querySelector('#y');
 	const image_ = document.querySelector('#image');
+	const tutoDelete = document.querySelector('#tutoDelete');
 	const tuto = document.querySelector('#tuto');
 	const infos = document.querySelector('#infos');
 	const name = document.querySelector('#name');
@@ -168,8 +189,6 @@
 		
 		const image = L.imageOverlay(img, bounds).addTo(map);
 
-		const m = L.marker(center).addTo(map);
-
 		const marker = L.marker([-10000, -10000]).addTo(map);
 		marker.setOpacity(0);
 
@@ -191,8 +210,16 @@
 			});
 		};
 
-		m.addEventListener('click', () => {
-			fetch('immersailles.php/infos/Q7742')
+		const hideMarker = function () {
+			map.removeEventListener('click', setCoord);
+			X.value = '';
+			Y.value = '';
+			marker.setOpacity(0);
+			marker.setLatLng([-10000, -10000]);
+		} 
+
+		const fetchData = function (idWikiData) {
+			fetch(`immersailles.php/infos/${idWikiData}`)
 			.then(data => data.json())
 			.then(json => {
 				image_.src = json.image;
@@ -203,40 +230,87 @@
 
 				tuto.style.display = 'none';
 				markerForm.style.display = 'none';
+				tutoDelete.style.display = 'none';
 				infos.style.display = 'block';
 
-				map.removeEventListener('click', setCoord);
-				X.value = '';
-				Y.value = '';
-				marker.setOpacity(0);
-				marker.setLatLng([-10000, -10000]);
-			});
-		});
+				hideMarker();
+			})
+			.catch(err => console.error(err));
+		}
 
+		const m = L.marker(center).addTo(map);
+		m.addEventListener('click', () => fetchData('Q7742'));
+
+		const marks = <?= json_encode($markers) ?>;
+		const markers = [];
+		
+		marks.forEach(marker => {
+			const m = L.marker([marker.X, marker.Y])
+				.addTo(map)
+				.addEventListener('click', () => fetchData(marker.idWikiData));
+			m.X = marker.X;
+			m.Y = marker.Y;
+			m.idWikiData = marker.idWikiData;
+
+			markers.push(m);
+		});
+			
+		const deleteMarkerEvent = function (event) {
+			const marker = event.target;
+			fetch(`immersailles.php/contributeur/deleteMarker/<?= $map->idNiveau ?>/${marker.idWikiData}/${marker.X}/${marker.Y}`, {
+				method: 'POST'
+			});
+			location.reload();
+		}
+
+		const addDeleteEvent = function () {
+			markers.forEach(marker => {
+				marker.addEventListener('click', deleteMarkerEvent);
+			});
+		}
+		
+		const removeDeleteEvent = function () {
+			markers.forEach(marker => {
+				marker.removeEventListener('click', deleteMarkerEvent);
+			});
+		}
 
 		close.forEach(btn => {
 			btn.addEventListener('click', () => {
 				infos.style.display = 'none';
 				markerForm.style.display = 'none';
+				tutoDelete.style.display = 'none';
 				tuto.style.display = 'flex';
 
-				map.removeEventListener('click', setCoord);
-				X.value = '';
-				Y.value = '';
-				marker.setOpacity(0);
-				marker.setLatLng([-10000, -10000]);
+				hideMarker();
+				removeDeleteEvent();
 			});
 		});
 
 		if (addMarker) {
 			addMarker.addEventListener('click', () => {
+				removeDeleteEvent();
+
 				tuto.style.display = 'none';
 				infos.style.display = 'none';
+				tutoDelete.style.display = 'none';
 				markerForm.style.display = 'block';
 
 				map.addEventListener('click', setCoord); 
 			});
 		}
+
+		if (deleteMarker) {
+			deleteMarker.addEventListener('click', () => {
+				tuto.style.display = 'none';
+				infos.style.display = 'none';
+				markerForm.style.display = 'none';
+				tutoDelete.style.display = 'block';
+
+				addDeleteEvent();
+			})
+		}
+
 
 		const etagePosition = document.querySelector('.leaflet-bottom.leaflet-left');
 
