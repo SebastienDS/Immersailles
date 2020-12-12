@@ -9,7 +9,7 @@ use PDO;
 
 class Marker extends Model {
 
-    public static $table = 'Marker';
+    public static $table = 'marker';
     
     public static function create($wikiData, $niveau, $X, $Y, int $idProfil) {
         $table = self::$table;
