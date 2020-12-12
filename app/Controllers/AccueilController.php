@@ -10,7 +10,7 @@ use App\Models\ObjetHistorique;
 
 class AccueilController extends Controller {
 
-    private static $range = 5;
+    private static $range = 10;
 
     private static function getCurrentEtage(array $etages) {
         foreach ($etages as $etage) {
