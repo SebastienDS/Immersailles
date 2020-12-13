@@ -171,6 +171,12 @@
 
 		return etage;
 	}
+
+	const icon = L.icon({
+		iconUrl: 'public/img/marker.png',
+		iconSize: [38, 50], 
+    	iconAnchor: [20, 50]
+	});
 			
 	img.addEventListener('load', () => {
 		const bounds = [
@@ -242,7 +248,7 @@
 		const markers = [];
 		
 		marks.forEach(marker => {
-			const m = L.marker([marker.X, marker.Y])
+			const m = L.marker([marker.X, marker.Y], {icon: icon})
 				.addTo(map)
 				.addEventListener('click', () => fetchData(marker.idWikiData));
 			m.X = marker.X;
