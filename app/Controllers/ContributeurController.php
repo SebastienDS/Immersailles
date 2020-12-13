@@ -57,20 +57,18 @@ class ContributeurController extends Controller {
             Annee::create($annee);
         }
 
-
         if (Contient_A_N::exists($annee, $etage)) {
             Niveau::delete($id);
             return header('Location: '. SCRIPT_NAME . "/immersailles.php/contributeur/map/infos/$mapName");
         }
         Contient_A_N::create($annee, $id);
-        rename(self::$depotDirectory . $mapName, self::$plansDirectory . $map . '.png');
+        var_dump(rename(self::$depotDirectory . $mapName, self::$plansDirectory . $map . '.png'));
+        die();
         return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/addMap');
     }
 
     public function deleteMarker(int $idNiveau, string $idObjet, float $X, float $Y) {
         Marker::delete($idNiveau, $idObjet, $X, $Y);
-
-        return var_dump($idNiveau, $idObjet, $X, $Y);
     }
 
     public function addMap() {
