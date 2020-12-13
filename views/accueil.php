@@ -90,7 +90,7 @@
 
 						<div>
 							<h3 class="inline text-orange-400">Type d'objet :</h3>
-							<p class="inline text-xs">Oeuvre d'art - Fauteuil</p>
+							<p class="inline text-xs">Personnage</p>
 						</div>
 
 						<div class="mt-2">

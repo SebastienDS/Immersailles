@@ -62,8 +62,7 @@ class ContributeurController extends Controller {
             return header('Location: '. SCRIPT_NAME . "/immersailles.php/contributeur/map/infos/$mapName");
         }
         Contient_A_N::create($annee, $id);
-        var_dump(rename(self::$depotDirectory . $mapName, self::$plansDirectory . $map . '.png'));
-        die();
+        rename(self::$depotDirectory . $mapName, self::$plansDirectory . $map . '.png');
         return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/addMap');
     }
 
@@ -73,7 +72,6 @@ class ContributeurController extends Controller {
 
     public function addMap() {
         $this->isConnected(['contributeur', 'admin']);
-
         
         $maps = array_diff(scandir(self::$depotDirectory), ['..', '.']);
 
