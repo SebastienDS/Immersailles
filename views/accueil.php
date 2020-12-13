@@ -163,8 +163,8 @@
 			etage.style.color = 'gray';
 		}
 
-		if (disabled || currentEtage) { 
 			etage.classList.add("leaflet-disabled");
+		if (disabled || currentEtage) { 
 			return etage;
 		}
 		etage.href += '?etage=' + numEtage + "&currentDate=<?= $currentDate ?>";
@@ -173,8 +173,8 @@
 	}
 
 	const icon = L.icon({
-		iconUrl: 'public/img/marker.png',
 		iconSize: [38, 50], 
+		iconUrl: 'public/img/marker.png',
     	iconAnchor: [20, 50]
 	});
 			
@@ -225,7 +225,10 @@
 		} 
 
 		const fetchData = function (idWikiData) {
-			fetch(`immersailles.php/infos/${idWikiData}`)
+			fetch(`immersailles.php/infos/${idWikiData}`, {
+				credentials: 'same-origin', 
+				mode: 'cors'
+			})
 			.then(data => data.json())
 			.then(json => {
 				image_.src = json.image;
@@ -261,7 +264,9 @@
 		const deleteMarkerEvent = function (event) {
 			const marker = event.target;
 			fetch(`immersailles.php/contributeur/deleteMarker/<?= $map->idNiveau ?>/${marker.idWikiData}/${marker.X}/${marker.Y}`, {
-				method: 'POST'
+				method: 'POST',
+				credentials: 'same-origin', 
+				mode: 'cors'
 			});
 			location.reload();
 		}
