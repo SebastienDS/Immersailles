@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Models\Administrateur;
 use App\Models\Contributeur;
 use App\Models\Profil;
+use App\Models\Session;
 
 class ConnexionController extends Controller {
 
@@ -32,10 +33,14 @@ class ConnexionController extends Controller {
         if (Administrateur::isConnected($username, $password)) {
             $_SESSION['auth'] = 'admin';
             $_SESSION['id'] = Profil::getIdWhere(['username' => $username, 'motDePasse' => sha1($password)]);
+            Session::create($_SESSION['id']);
+
             return header('Location: '. SCRIPT_NAME .'/immersailles.php');
         } else if (Contributeur::isConnected($username, $password)) {
             $_SESSION['auth'] = 'contributeur';
             $_SESSION['id'] = Profil::getIdWhere(['username' => $username, 'motDePasse' => sha1($password)]);
+            Session::create($_SESSION['id']);
+            
             return header('Location: '. SCRIPT_NAME .'/immersailles.php');
         }
         return header('Location: '. SCRIPT_NAME .'/immersailles.php/connexion?error=1');

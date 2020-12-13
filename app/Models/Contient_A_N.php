@@ -27,4 +27,10 @@ class Contient_A_N extends Model {
         $stmt->execute([$annee, $idNiveau]);
         return DBConnection::getPDO()->lastInsertId();
     }
+
+    public static function delete(int $idNiveau, int $annee) {
+        $tableName = self::$table;
+        $stmt = DBConnection::getPDO()->prepare("DELETE FROM $tableName WHERE idNiveau = ? AND annee = ?");
+        $stmt->execute([$idNiveau, $annee]);
+    }
 }

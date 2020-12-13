@@ -238,9 +238,6 @@
 			.catch(err => console.error(err));
 		}
 
-		const m = L.marker(center).addTo(map);
-		m.addEventListener('click', () => fetchData('Q7742'));
-
 		const marks = <?= json_encode($markers) ?>;
 		const markers = [];
 		

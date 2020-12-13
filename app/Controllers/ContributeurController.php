@@ -13,6 +13,7 @@ use App\Models\Marker;
 class ContributeurController extends Controller {
 
     private static $depotDirectory = 'depot/maps';
+    private static $plansDirectory = 'public/img/plans';
 
     public function accueil() {
         $this->isConnected(['contributeur']);
@@ -25,12 +26,8 @@ class ContributeurController extends Controller {
     public function mapManagement() {
         $this->isConnected(['contributeur', 'admin']);
 
-        
-        $maps = array_diff(scandir(self::$depotDirectory), ['..', '.']);
-
         return $this->view('contributeur/mapManagement', [
             'title' => 'Map Management',
-            'maps' => $maps
         ]);
     }
 
@@ -45,7 +42,7 @@ class ContributeurController extends Controller {
         ]);
     }
 
-    public function addMap(string $mapName) {
+    public function addMapFromDepot(string $mapName) {
         $this->isConnected(['contributeur', 'admin']);
 
         $id = Niveau::getNextId();
@@ -66,7 +63,7 @@ class ContributeurController extends Controller {
             return header('Location: '. SCRIPT_NAME . "/immersailles.php/contributeur/map/infos/$mapName");
         }
         Contient_A_N::create($annee, $id);
-        rename("depot/maps/$mapName", "public/img/plans/$map.png");
+        rename(self::$depotDirectory . $mapName, self::$plansDirectory . $map . '.png');
         return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/mapManagement');
     }
 
@@ -74,5 +71,40 @@ class ContributeurController extends Controller {
         Marker::delete($idNiveau, $idObjet, $X, $Y);
 
         return var_dump($idNiveau, $idObjet, $X, $Y);
+    }
+
+    public function addMap() {
+        $this->isConnected(['contributeur', 'admin']);
+
+        
+        $maps = array_diff(scandir(self::$depotDirectory), ['..', '.']);
+
+        return $this->view('contributeur/addMap', [
+            'title' => 'Ajout d\'un plan',
+            'maps' => $maps
+        ]);
+    }
+
+    public function deleteMap() {
+        $this->isConnected(['contributeur', 'admin']);
+
+        $maps = Niveau::all();
+
+        return $this->view('contributeur/deleteMap', [
+            'title' => 'Suppression d\'un plan',
+            'maps' => $maps
+        ]);
+    }
+
+    public function removeMap(int $idNiveau, int $annee) {
+        $this->isConnected(['contributeur', 'admin']);
+
+        $map = 'plan'. $idNiveau . '.png';
+        
+        Niveau::delete($idNiveau);
+        Contient_A_N::delete($idNiveau, $annee);
+        rename(self::$plansDirectory . $map, self::$depotDirectory . $map);
+
+        return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/deleteMap');
     }
 }

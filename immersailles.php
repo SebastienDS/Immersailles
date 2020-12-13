@@ -37,8 +37,11 @@ $router->post('/admin/deleteContributor/:idProfil', 'App\Controllers\AdminContro
 
 $router->get('/contributeur', 'App\Controllers\ContributeurController@accueil');
 $router->get('/contributeur/mapManagement', 'App\Controllers\ContributeurController@mapManagement');
+$router->get('/contributeur/addMap', 'App\Controllers\ContributeurController@addMap');
+$router->get('/contributeur/deleteMap', 'App\Controllers\ContributeurController@deleteMap');
 $router->get('/contributeur/map/infos/:mapName', 'App\Controllers\ContributeurController@mapInfos');
-$router->post('/contributeur/map/infos/:mapName', 'App\Controllers\ContributeurController@addMap');
+$router->post('/contributeur/map/infos/:mapName', 'App\Controllers\ContributeurController@addMapFromDepot');
+$router->post('/contributeur/map/delete/:idNiveau/:annee', 'App\Controllers\ContributeurController@removeMap');
 $router->post('/contributeur/deleteMarker/:idNiveau/:idWikiData/:X/:Y', 'App\Controllers\ContributeurController@deleteMarker');
 
 

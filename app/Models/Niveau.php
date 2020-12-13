@@ -12,6 +12,15 @@ class Niveau extends Model {
 
     public static $table = 'Niveau';
 
+    public static function all(): array {
+        $tableName = self::$table;
+        $contientTable = Contient_A_N::$table;
+
+        $stmt = DBConnection::getPDO()->query("SELECT idNiveau, map, annee, niveau FROM $tableName NATURAL JOIN $contientTable ORDER BY annee, niveau");
+        $stmt->setFetchMode(PDO::FETCH_OBJ);
+        return $stmt->fetchAll();
+    }
+
     public static function create(string $map, int $niveau): int {
         $table = self::$table;
 

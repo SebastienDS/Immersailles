@@ -1,16 +1,6 @@
-<div style="min-height: 80%">
-
-    <?php foreach ($maps as $map): ?>
-        <div class="flex justify-between items-center p-6 border">
-            
-            <div><?= $map ?></div>
-
-            <div>
-                <img src="<?= SCRIPT_NAME ?>/depot/maps/<?= $map ?>" alt="preview map" width="300">
-            </div>
-
-            <a href="<?= SCRIPT_NAME ?>/immersailles.php/contributeur/map/infos/<?= $map ?>"><i class="fa fa-plus" style="font-size: 2.5rem"></i></a>
-        </div>
-    <?php endforeach ?>
-
+<div style="height: 80%;" class="flex justify-center items-center">
+    <div class="flex flex-col justify-between" style="height: 35%">
+        <a href="<?= SCRIPT_NAME ?>/immersailles.php/contributeur/addMap" class="bg-black text-white px-12 py-6 rounded-xl text-center">Ajouter un plan</a>
+        <a href="<?= SCRIPT_NAME ?>/immersailles.php/contributeur/deleteMap" class="bg-black text-white px-12 py-6 rounded-xl text-center">Supprimer un plan</a>
+    </div>
 </div>
