@@ -12,8 +12,8 @@ use App\Models\Marker;
 
 class ContributeurController extends Controller {
 
-    private static $depotDirectory = 'depot/maps';
-    private static $plansDirectory = 'public/img/plans';
+    private static $depotDirectory = 'depot/maps/';
+    private static $plansDirectory = 'public/img/plans/';
 
     public function accueil() {
         $this->isConnected(['contributeur']);
@@ -64,7 +64,7 @@ class ContributeurController extends Controller {
         }
         Contient_A_N::create($annee, $id);
         rename(self::$depotDirectory . $mapName, self::$plansDirectory . $map . '.png');
-        return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/mapManagement');
+        return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/addMap');
     }
 
     public function deleteMarker(int $idNiveau, string $idObjet, float $X, float $Y) {
