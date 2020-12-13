@@ -48,6 +48,12 @@ class Annee extends Model {
         return DBConnection::getPDO()->lastInsertId();
     }
 
+    public static function delete(int $annee) {
+        $tableName = self::$table;
+        $stmt = DBConnection::getPDO()->prepare("DELETE FROM $tableName WHERE annee = ?");
+        $stmt->execute([$annee]);
+    }
+
     public static function range(int $start, int $range): array {
         $table = self::$table;
       

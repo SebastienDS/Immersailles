@@ -98,7 +98,7 @@ class ContributeurController extends Controller {
         $map = 'plan'. $idNiveau . '.png';
         
         Niveau::delete($idNiveau);
-        Contient_A_N::delete($idNiveau, $annee);
+        Annee::delete($annee);
         rename(self::$plansDirectory . $map, self::$depotDirectory . $map);
 
         return header('Location: '. SCRIPT_NAME . '/immersailles.php/contributeur/deleteMap');
